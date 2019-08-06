@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +8,8 @@ using Petshop.Repository;
 using Petshop.Repository.Interface;
 using PetShop.Service;
 using PetShop.Service.Interface;
+using Serilog;
+using Serilog.Events;
 
 namespace Petshop.Web
 {
@@ -33,6 +31,17 @@ namespace Petshop.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .WriteTo.File("c:\\log\\log.txt")
+            .WriteTo.MongoDB("mongodb://localhost:27017/developers0012", collectionName: "xandao")
+            .CreateLogger();
+
+
             services.AddSingleton<IPetRepository, PetRepository>();
             services.AddTransient<IPetServices, PetServices>();
 

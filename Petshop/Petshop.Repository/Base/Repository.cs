@@ -32,7 +32,7 @@ namespace Petshop.Repository.Base
                         transaction.Commit();
                         return id;
                     }
-                    catch (Exception ex)
+                    catch  
                     {
                         transaction.Rollback();
                         throw;

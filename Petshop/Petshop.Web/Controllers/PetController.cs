@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Petshop.Domain.Entity;
 using PetShop.Service.Interface;
 
@@ -12,15 +13,19 @@ namespace Petshop.Web.Controllers
     public class PetController : Controller
     {
         private readonly IPetServices _petService;
+        private readonly ILogger<PetController> _logger;
 
-        public PetController(IPetServices petService)
+        public PetController(IPetServices petService,
+                             ILogger<PetController> logger)
         {
             _petService = petService;
+            _logger = logger;
         }
 
         // GET: Pet
         public ActionResult Index()
         {
+            _logger.LogError("opa");
             var model = _petService.GetAll();
             return View(model);
         }
